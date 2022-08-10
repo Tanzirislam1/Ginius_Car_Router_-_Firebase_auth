@@ -5,6 +5,7 @@ import githubIcon from '../../../images/social/GitHub-Mark.png';
 import auth from '../../../Firebase/Firebase.init';
 import { useSignInWithGithub, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../Shared/Loading/Loading';
 
 const SocialLogin = () => {
     const navigate = useNavigate();
@@ -26,6 +27,12 @@ const SocialLogin = () => {
         errorElement = <div>
             <p className='text-danger'>Error: {error?.message} {githubError?.message}</p>
         </div>
+    }
+
+    /* use-loading : amra react-firebase-hook er state gulo copy kore niye ashale shob jaygay loading state thake amra loading ta set kore dayoar jonne amra shared er moddhe loading name component create korse...if jodi loading hoy tahole amader return korbe loading component k... */
+
+    if(loading || githubLoading){
+        return <Loading></Loading>
     }
 
     /* user-navigate : amra google and github 2 ta provider er condition akshate kortase jodi google ba github jeita diye login korbo amader navigate korbe home route e... */

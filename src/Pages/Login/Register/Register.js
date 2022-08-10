@@ -4,6 +4,7 @@ import auth from '../../../Firebase/Firebase.init';
 import './Register.css';
 import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
 import SocialLogin from '../SocialLogin/SocialLogin';
+import Loading from '../../Shared/Loading/Loading';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -26,6 +27,12 @@ const Register = () => {
 
     if (user) {
         console.log('user', user);
+    }
+
+    /* use-loading : amra react-firebase-hook er state gulo copy kore niye ashale shob jaygay loading state thake amra loading ta set kore dayoar jonne amra shared er moddhe loading name component create korse...if jodi loading hoy abar if jodi updateProfile er updating hoy tahole amader return korbe loading component k... */
+
+    if(loading || updating){
+        return <Loading></Loading>
     }
 
     /* step-5 : create from for register and if you are already user so we navigate you to login route...  */

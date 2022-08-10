@@ -4,7 +4,10 @@ import Form from 'react-bootstrap/Form';
 import { useSendPasswordResetEmail, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../Firebase/Firebase.init';
+import Loading from '../Shared/Loading/Loading';
 import SocialLogin from './SocialLogin/SocialLogin';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
     /* step-1 : amra from er input field er target value access korte state declair nh kore amra useRef declair korse email password er jonne...and amra input er moddhe ref={} ref niye ter moddhe amra email,password er uref() er jei variable name set korse sheita ref={} ref er moddhe call kortase.. */
@@ -34,6 +37,12 @@ const Login = () => {
         </div>
     }
 
+    /* use-loading : amra react-firebase-hook er state gulo copy kore niye ashale shob jaygay loading state thake amra loading ta set kore dayoar jonne amra shared er moddhe loading name component create korse...if jodi loading hoy abar if jodi sendPasswordResetEmail er sending hoy tahole amader return korbe loading component k... */
+
+    if (loading || sending) {
+        return <Loading></Loading>
+    }
+
     /* redirected form */
     let from = location.state?.from?.pathname || "/";
 
@@ -58,10 +67,18 @@ const Login = () => {
     }
 
     /* Forget password / Reset password Handler */
-    const resetPassword = async() => {
+    const resetPassword = async () => {
         const email = emailRef.current.value;
-        await sendPasswordResetEmail(email);
-          alert('Sent email');
+        /* validation : if jodi email hoy ba email jodi thake  tahole amader toast ta k dekhabe er else jodi email nh thake tahole amader error hisabe bolbe Please enter your email address... */
+        if (email) {
+            await sendPasswordResetEmail(email);
+            // alert('Sent email');
+            /* react-tostify */
+            toast('Sent Email');
+        }
+        else{
+            toast('Please enter your email address');
+        }
     }
 
     return (
@@ -87,8 +104,10 @@ const Login = () => {
 
             <p className='text-center'>New to Genius Car? <Link to="/register" onClick={navigateRegister} className='text-danger text-decoration-none'>Please Register</Link></p>
 
-            <p className='text-center'> Forget Password? <Link to="/register" onClick={resetPassword} className='text-danger text-decoration-none'>Reset Password</Link></p>
+            <p className='text-center'> Forget Password? <button onClick={resetPassword} className='btn btn-link text-danger text-decoration-none'>Reset Password</button></p>
             <SocialLogin></SocialLogin>
+            {/* react tostify container : amra container k import korse and amra toastContainer k jei kono jayga theke call korlei hbe... */}
+            <ToastContainer />
         </div>
     );
 };
